@@ -3,6 +3,7 @@
 # This file is part of the BlueButton.py project.
 # Use of this source code is governed by the license found in the LICENSE file.
 ###############################################################################
+from bluebutton.documents import parse_effective_time
 
 """
 Parser for the CCDA functional & cognitive status
@@ -20,10 +21,7 @@ def functional_statuses(ccda):
 
     for entry in statuses.entries():
 
-        date = parse_date(entry.tag('effectiveTime').attr('value'))
-
-        if not date:
-            date = parse_date(entry.tag('effectiveTime').tag('low').attr('value'))
+        date = parse_effective_time(entry.tag('effectiveTime'))
 
         el = entry.tag('value')
 

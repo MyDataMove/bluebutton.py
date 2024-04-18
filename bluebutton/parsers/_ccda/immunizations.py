@@ -3,6 +3,7 @@
 # This file is part of the BlueButton.py project.
 # Use of this source code is governed by the license found in the LICENSE file.
 ###############################################################################
+from bluebutton.documents import parse_effective_time
 
 """
 Parser for the CCDA immunizations section
@@ -23,10 +24,7 @@ def immunizations(ccda):
     for entry in immunizations.entries():
 
         # date
-        el = entry.tag('effectiveTime')
-        date = parse_date(el.attr('value'))
-        if not date:
-            date = parse_date(el.tag('low').attr('value'))
+        date = parse_effective_time(entry.tag('effectiveTime'))
 
         # if 'declined' is true, this is a record that this vaccine WASN'T
         # administered

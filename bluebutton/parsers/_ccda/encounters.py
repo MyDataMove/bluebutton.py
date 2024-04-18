@@ -3,6 +3,7 @@
 # This file is part of the BlueButton.py project.
 # Use of this source code is governed by the license found in the LICENSE file.
 ###############################################################################
+from bluebutton.documents import parse_effective_time
 
 """
 Parser for the CCDA encounters section
@@ -19,8 +20,8 @@ def encounters(ccda):
     encounters = ccda.section('encounters')
 
     for entry in encounters.entries():
-
-        date = parse_date(entry.tag('effectiveTime').attr('value'))
+        
+        date = parse_effective_time(entry.tag('effectiveTime'))
 
         el = entry.tag('code')
         name = el.attr('displayName')
@@ -56,6 +57,7 @@ def encounters(ccda):
         for current in findings_els:
             el = current.tag('value')
             findings.append(wrappers.ObjectWrapper(
+                date=parse_effective_time(current.tag('effectiveTime')),
                 name=el.attr('displayName'),
                 code=el.attr('code'),
                 code_system=el.attr('codeSystem'),

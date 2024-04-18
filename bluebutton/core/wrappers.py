@@ -3,6 +3,7 @@
 # This file is part of the BlueButton.py project.
 # Use of this source code is governed by the license found in the LICENSE file.
 ###############################################################################
+import sys
 
 """
 Classes and functions that make ported code look more like original JavaScript
@@ -62,7 +63,7 @@ class JSONEncoder(json.JSONEncoder):
 
 class ObjectWrapper(object):
     def __init__(self, **kwargs):
-        for keyword, value in kwargs.iteritems():
+        for keyword, value in kwargs.items():
             setattr(self, keyword, value)
 
     def __setattr__(self, key, value):
@@ -72,13 +73,13 @@ class ObjectWrapper(object):
             val = method
         object.__setattr__(self, key, val)
 
-    def json(self):
-        return json.dumps(self, cls=JSONEncoder)
+    def json(self, *args, **kwargs):
+        return json.dumps(self, cls=JSONEncoder, *args, **kwargs)
 
 
 class ListWrapper(list):
-    def json(self):
-        return json.dumps(self, cls=JSONEncoder)
+    def json(self, *args, **kwargs):
+        return json.dumps(self, cls=JSONEncoder, *args, **kwargs)
 
 
 def parse_number(s):
@@ -87,5 +88,10 @@ def parse_number(s):
     """
     if not s:
         return None
-    value = float(s)
+		
+    try:
+        value = float(s)
+    except:
+        return None
+		
     return int(value) if value == int(value) else value

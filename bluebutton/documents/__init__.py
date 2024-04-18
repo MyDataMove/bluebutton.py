@@ -53,27 +53,26 @@ def parse_address(address_element):
         country=country,
     )
 
-
+def parse_effective_time(effective_time):
+    value = effective_time.attr('value')
+    if not value:
+        value = effective_time.tag('low').attr('value')
+        
+    return parse_date(value)
+            
 def parse_date(string):
     """
     Parses an HL7 date in String form and creates a new Date object.
 
-    TODO: CCDA dates can be in form:
-        <effectiveTime value="20130703094812"/>
-    ...or:
-        <effectiveTime>
-            <low value="19630617120000"/>
-            <high value="20110207100000"/>
-        </effectiveTime>
-
-    For the latter, parse_date will not be given type `string` and will return
-    `None`.
 
     The syntax is "YYYYMMDDHHMMSS.UUUU[+|-ZZzz]" where digits can be omitted
     the right side to express less precision
     """
-    if not isinstance(string, basestring):
+    if not isinstance(string, str):
         return None
+    
+    #workaround - if the date happens to be formatted (ex: 2018-10-08T07:00:00+00:00), strip formatting characters
+    string = string.replace('-', '').replace(':', '').replace('T', '')
 
     # ex. value="1999" translates to 1 Jan 1999
     if len(string) == 4:
@@ -110,4 +109,11 @@ def parse_name(name_element):
         prefix=prefix,
         given=given,
         family=family
+    )
+    
+def parse_id(id_element):
+    return wrappers.ObjectWrapper(
+        root=id_element.attr('root'),
+        extension=id_element.attr('extension'),
+        assigning_authority=id_element.attr('assigningAuthorityName')
     )

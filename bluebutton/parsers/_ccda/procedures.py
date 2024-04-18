@@ -3,6 +3,7 @@
 # This file is part of the BlueButton.py project.
 # Use of this source code is governed by the license found in the LICENSE file.
 ###############################################################################
+from bluebutton.documents import parse_effective_time
 
 """
 Parser for the CCDA procedures section
@@ -24,7 +25,7 @@ def procedures(ccda):
     for entry in procedures.entries():
 
         el = entry.tag('effectiveTime')
-        date = parse_date(el.attr('value'))
+        date = parse_effective_time(el)
 
         el = entry.tag('code')
         name = el.attr('displayName')

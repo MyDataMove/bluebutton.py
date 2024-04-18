@@ -18,6 +18,9 @@ def demographics(ccda):
     demographics = ccda.section('demographics')
 
     patient = demographics.tag('patientRole')
+
+    ids = [documents.parse_id(id_element) for id_element in patient.els_by_tag('id')]
+
     el = patient.tag('patient').tag('name')
     patient_name_dict = parse_name(el)
 
@@ -62,6 +65,7 @@ def demographics(ccda):
     provider_address_dict = parse_address(el.tag('addr'))
 
     return wrappers.ObjectWrapper(
+        ids=wrappers.ListWrapper(ids),
         name=patient_name_dict,
         dob=dob,
         gender=gender,

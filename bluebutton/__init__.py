@@ -6,8 +6,10 @@
 
 from . import core
 from . import documents
-import documents.ccda
-import parsers.ccda
+# import documents.ccda
+# import parsers.ccda
+from .documents import ccda as ccda_document
+from .parsers import ccda as ccda_parser
 
 
 class BlueButton(object):
@@ -30,8 +32,8 @@ class BlueButton(object):
                 # parsed_document = parsers.C32.run(parsed_data)
                 pass
             elif 'ccda' == type:
-                parsed_data = documents.ccda.process(parsed_data)
-                parsed_document = parsers.ccda.run(parsed_data)
+                parsed_data = ccda_document.process(parsed_data)
+                parsed_document = ccda_parser.run(parsed_data)
             elif 'json' == type:
                 # TODO: add support for JSON
                 pass
