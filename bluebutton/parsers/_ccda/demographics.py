@@ -31,13 +31,23 @@ def demographics(ccda):
 
     el = patient.tag('addr')
     patient_address_dict = parse_address(el)
-
-    el = patient.tag('telecom')
-    home = el.attr('value')
+    
+    home = None
     work = None
     mobile = None
-
     email = None
+    
+    telecom_debug = []
+    for t in patient.children_by_tag('telecom'):
+        telecom_debug.append(ObjectWrapper(use=t.attr('use'), value=t.attr('value')))
+        if (t.attr('value') or '').startswith('mailto:'):
+            email = t.attr('value')[7:]
+        elif t.attr('use') == 'HP':
+            home = t.attr('value')
+        elif t.attr('use') == 'WP':
+            work = t.attr('value')
+        elif t.attr('use') == 'MC':
+            mobile = t.attr('value')
 
     language = patient.tag('languageCommunication').tag('languageCode').attr('code')
     race = patient.tag('raceCode').attr('displayName')
@@ -76,6 +86,7 @@ def demographics(ccda):
             work=work,
             mobile=mobile
         ),
+        #telecom_debug=ListWrapper(telecom_debug),
         email=email,
         language=language,
         race=race,

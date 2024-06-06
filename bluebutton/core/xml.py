@@ -91,6 +91,11 @@ class _Element(object):
         else:
             return self._wrap_element(el)
 
+    def children_by_tag(self, tag):
+        els = self._element.findall(
+            "./{ns}{name}".format(name=tag, ns='{urn:hl7-org:v3}'))
+        return self._wrap_element(els)
+
     def els_by_tag(self, tag):
         els = self._element.findall(
             ".//{ns}{name}".format(name=tag, ns='{urn:hl7-org:v3}'))

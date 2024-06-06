@@ -5,6 +5,7 @@
 ###############################################################################
 
 import datetime
+import sys
 
 from ..core import wrappers
 
@@ -96,7 +97,11 @@ def parse_date(string):
         return datetime.datetime(year, month, day, hour, mins, secs,
                                  tzinfo=timezone)
 
-    return datetime.date(year, month, day)
+    try:
+        return datetime.date(year, month, day)
+    except Exception as ex:
+	    pass
+        #print(f'Failed to parse date {string}', file=sys.stderr)
 
 
 def parse_name(name_element):
