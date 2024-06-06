@@ -39,7 +39,7 @@ def demographics(ccda):
     
     telecom_debug = []
     for t in patient.children_by_tag('telecom'):
-        telecom_debug.append(ObjectWrapper(use=t.attr('use'), value=t.attr('value')))
+        telecom_debug.append(wrappers.ObjectWrapper(use=t.attr('use'), value=t.attr('value')))
         if (t.attr('value') or '').startswith('mailto:'):
             email = t.attr('value')[7:]
         elif t.attr('use') == 'HP':
