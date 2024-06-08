@@ -94,5 +94,12 @@ def section(ccda, name):
             el = ccda.template('2.16.840.1.113883.10.20.22.2.4')
         el.entries = entries
         return el
+    
+    if 'assessments' == name:
+        el = ccda.template('2.16.840.1.113883.10.20.22.2.8.1')
+        if el.is_empty():
+            el = ccda.template('2.16.840.1.113883.10.20.22.2.8')
+        el.entries = entries
+        return el
 
     return None

@@ -73,7 +73,9 @@ def parse_date(string):
         return None
     
     #workaround - if the date happens to be formatted (ex: 2018-10-08T07:00:00+00:00), strip formatting characters
-    string = string.replace('-', '').replace(':', '').replace('T', '')
+    if 'T' in string:
+        parts = string.split('T')
+        string = parts[0].replace('-', '') + parts[1].replace(':', '')
 
     # ex. value="1999" translates to 1 Jan 1999
     if len(string) == 4:

@@ -19,6 +19,7 @@ from ._ccda.procedures import procedures
 from ._ccda.results import results
 from ._ccda.smoking_status import smoking_status
 from ._ccda.vitals import vitals
+from ._ccda.assessments import assessments
 from ..core import wrappers
 
 
@@ -41,5 +42,6 @@ def run(ccda):
     data.procedures = procedures(ccda)
     data.smoking_status = smoking_status(ccda)
     data.vitals = vitals(ccda)
+    data.assessments = assessments(ccda)
 
     return data

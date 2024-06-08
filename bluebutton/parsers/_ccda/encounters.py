@@ -10,6 +10,7 @@ Parser for the CCDA encounters section
 """
 
 from ...core import wrappers
+from ... import core
 from ...documents import parse_address, parse_date
 
 
@@ -29,6 +30,8 @@ def encounters(ccda):
         code_system = el.attr('codeSystem')
         code_system_name = el.attr('codeSystemName')
         code_system_version = el.attr('codeSystemVersion')
+        ot_element = el.tag('originalText')
+        original_text = core.strip_whitespace(ot_element.val()) if not ot_element.is_empty() else None
         
         # translation
         el = entry.tag('translation')
@@ -55,13 +58,15 @@ def encounters(ccda):
         findings = []
         findings_els = entry.els_by_tag('entryRelationship')
         for current in findings_els:
-            el = current.tag('value')
-            findings.append(wrappers.ObjectWrapper(
-                date=parse_effective_time(current.tag('effectiveTime')),
-                name=el.attr('displayName'),
-                code=el.attr('code'),
-                code_system=el.attr('codeSystem'),
-            ))
+            if current.attr('typeCode') == 'SUBJ':
+                el = current.tag('value')
+                findings.append(wrappers.ObjectWrapper(
+                    date=parse_effective_time(current.tag('effectiveTime')),
+                    name=el.attr('displayName'),
+                    code=el.attr('code'),
+                    code_system=el.attr('codeSystem'),
+                    null_flavor=el.attr('nullFlavor'),
+                ))
 
         data.append(wrappers.ObjectWrapper(
             date=date,
@@ -70,6 +75,7 @@ def encounters(ccda):
             code_system=code_system,
             code_system_name=code_system_name,
             code_system_version=code_system_version,
+            original_text=original_text,
             findings=findings,
             translation=wrappers.ObjectWrapper(
                 name=translation_name,
